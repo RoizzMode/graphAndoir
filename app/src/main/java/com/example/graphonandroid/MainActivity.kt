@@ -2,55 +2,84 @@ package com.example.graphonandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), VertexContract.VertexView {
+
+    private val presenter = GraphPresenter()
+    private var listItems1 = arrayListOf<String>()
+    private var adapter = createAdapter()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val listVertex = arrayListOf<Vertex>()
-        val adapter = createList(listVertex)
-        initButtonForAddingVertexes(listVertex, adapter)
-        initButtonForCalculating(listVertex)
+        presenter.attachView(this)
+        initAdapterAndButtons()
     }
 
-    private fun createList(listVertex:ArrayList<Vertex>):VertexAdapter {
-        val layoutManage = LinearLayoutManager(this)
-        val adapter = VertexAdapter(listVertex, this)
+    private fun initAdapterAndButtons() {
+        initButtonForAddingVertexes()
+        initButtonForCalculating()
+        initEditNewVertexName()
+
+        listOfVertex.layoutManager = LinearLayoutManager(this)
         listOfVertex.adapter = adapter
-        listOfVertex.layoutManager = layoutManage
-        return(adapter)
     }
 
-    private fun initButtonForCalculating(listVertex: ArrayList<Vertex>) {
-        val algorithm = AlgorithmDFS()
-        calculate_button.setOnClickListener {
-            val chosenVertex:Vertex? = findStartVertex(start_vertex.text.toString(), listVertex)
-            if (chosenVertex == null){
-                Toast.makeText(this, "Such vertex doesn't exist", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+    private fun createAdapter(items: List<String> = emptyList()): VertexAdapter {
+        val adapter = VertexAdapter(items, presenter)
+        return (adapter)
+    }
+
+    private fun initEditNewVertexName() {
+        name_of_new_vertex.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
             }
-            else (listVertex.size != 0)
-                result.text = algorithm.depthFirstSearchAndReset(chosenVertex, arrayListOf(), listVertex).toString()
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                presenter.vertexNameEntered(name_of_new_vertex.text.toString())
+            }
+        })
+    }
+
+    private fun initButtonForCalculating() {
+        calculate_button.setOnClickListener {
+            presenter.calculateButtonClicked(start_vertex.text.toString())
         }
     }
 
-    private fun initButtonForAddingVertexes(listVertex:ArrayList<Vertex>, adapter:VertexAdapter) {
+    private fun initButtonForAddingVertexes() {
         add_button.setOnClickListener {
-            listVertex.add(Vertex(name_of_new_vertex.text.toString()))
-            adapter.notifyDataSetChanged()
+            presenter.addVertexButtonClicked()
         }
     }
 
-    private fun findStartVertex(name:String, listVertex:ArrayList<Vertex>):Vertex?{
-        for (i in 0..listVertex.lastIndex){
-            if (name == listVertex[i].name)
-                return listVertex[i]
-        }
-        return null
+    override fun showItemsNames(items: ArrayList<String>) {
+        adapter = createAdapter(items)
+        listOfVertex.adapter = adapter
+    }
+
+    override fun showNiceResult(resultGraph: String) {
+        result.text = resultGraph
+    }
+
+    override fun showNullResult(resultGraph: String) {
+        showToast(resultGraph)
+    }
+
+    override fun showNeighbourAdded() {
+        showToast("Neighbour added")
+    }
+
+    private fun showToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 }
