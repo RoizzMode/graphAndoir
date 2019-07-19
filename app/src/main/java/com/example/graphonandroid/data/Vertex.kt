@@ -1,4 +1,4 @@
-package com.example.graphonandroid
+package com.example.graphonandroid.data
 
 class Vertex(val name: String) {
     var isVisited = false

@@ -12,4 +12,9 @@
     <string name="name_of_neighbour">Name of neighbour</string>
     <string name="name_of_new_vertex">Name of new vertex</string>
     <string name="start_vertex">Start vertex</string>
+    <string name="title_activity_result">Result page</string>
+    <string name="sort_vertex">sort vertexes</string>
+    <string name="go_to_operations">Go to operations</string>
+    <string name="neighbour_added">Neighbour added</string>
+    <string name="vertex_does_not_exist">Such vertex does not exist</string>
 </resources>

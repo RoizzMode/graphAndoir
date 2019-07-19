@@ -1,22 +1,27 @@
-package com.example.graphonandroid
+package com.example.graphonandroid.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.graphonandroid.data.DataApplication
+import com.example.graphonandroid.R
+import com.example.graphonandroid.adapters.VertexAdapter
+import com.example.graphonandroid.contracts.VertexContract
+import com.example.graphonandroid.presenters.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), VertexContract.VertexView {
 
-    private val presenter = GraphPresenter()
-    private var listItems1 = arrayListOf<String>()
-    private var adapter = createAdapter()
+    private lateinit var presenter: MainPresenter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        presenter = MainPresenter((application as DataApplication).graphModel)
         setContentView(R.layout.activity_main)
         presenter.attachView(this)
         initAdapterAndButtons()
@@ -24,11 +29,11 @@ class MainActivity : AppCompatActivity(), VertexContract.VertexView {
 
     private fun initAdapterAndButtons() {
         initButtonForAddingVertexes()
-        initButtonForCalculating()
         initEditNewVertexName()
+        initGoToCalculationsButton()
 
         listOfVertex.layoutManager = LinearLayoutManager(this)
-        listOfVertex.adapter = adapter
+        listOfVertex.adapter = createAdapter()
     }
 
     private fun createAdapter(items: List<String> = emptyList()): VertexAdapter {
@@ -50,9 +55,10 @@ class MainActivity : AppCompatActivity(), VertexContract.VertexView {
         })
     }
 
-    private fun initButtonForCalculating() {
-        calculate_button.setOnClickListener {
-            presenter.calculateButtonClicked(start_vertex.text.toString())
+    private fun initGoToCalculationsButton(){
+        go_to_operations.setOnClickListener {
+            val intent = Intent(this, CalculateActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -63,20 +69,16 @@ class MainActivity : AppCompatActivity(), VertexContract.VertexView {
     }
 
     override fun showItemsNames(items: ArrayList<String>) {
-        adapter = createAdapter(items)
+        val adapter = createAdapter(items)
         listOfVertex.adapter = adapter
     }
 
-    override fun showNiceResult(resultGraph: String) {
-        result.text = resultGraph
-    }
-
-    override fun showNullResult(resultGraph: String) {
-        showToast(resultGraph)
+    override fun showNullResult() {
+        showToast(getText(R.string.vertex_does_not_exist).toString())
     }
 
     override fun showNeighbourAdded() {
-        showToast("Neighbour added")
+        showToast(getText(R.string.neighbour_added).toString())
     }
 
     private fun showToast(text: String) {

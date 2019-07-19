@@ -1,13 +1,14 @@
-package com.example.graphonandroid
+package com.example.graphonandroid.data
 
-class GraphModel {
+class GraphModel(private val algorithmDFS: AlgorithmDFS) {
     val listVertex = arrayListOf<Vertex>()
 
     fun addNewVertex(name: String) {
         listVertex.add(Vertex(name))
     }
 
-    fun addNewNeighbour(currentVertex: Vertex, nameOfNeighbour: String): Boolean {
+    fun addNewNeighbour(position: Int, nameOfNeighbour: String): Boolean {
+        val currentVertex = listVertex[position]
         for (i in 0..(listVertex.lastIndex)) {
             if (nameOfNeighbour == listVertex[i].name) {
                 currentVertex.neighbours.add(listVertex[i])
@@ -17,16 +18,17 @@ class GraphModel {
         return false
     }
 
-    fun calculate(name: String): String? {
-        val algorithm = AlgorithmDFS()
+
+    fun calculateFirstDepthSearch(name: String): String? {
+        val algorithm = algorithmDFS
         val chosenVertex: Vertex? = findStartVertex(name, listVertex)
         if (chosenVertex == null) {
             return null
         } else (listVertex.size != 0)
-        return algorithm.depthFirstSearchAndReset(chosenVertex, arrayListOf(), listVertex).toString()
+        return algorithm.calculateDepthFirstSearchAndReset(chosenVertex, arrayListOf(), listVertex).toString()
     }
 
-    private fun findStartVertex(name: String, listVertex: ArrayList<Vertex>): Vertex? {
+    fun findStartVertex(name: String, listVertex: ArrayList<Vertex>): Vertex? {
         for (i in 0..listVertex.lastIndex) {
             if (name == listVertex[i].name)
                 return listVertex[i]
@@ -34,11 +36,17 @@ class GraphModel {
         return null
     }
 
-    fun getNames():ArrayList<String>{
+    fun getNames(): ArrayList<String> {
         val listNames = arrayListOf<String>()
-        for (i in 0..listVertex.lastIndex){
+        for (i in 0..listVertex.lastIndex) {
             listNames.add(listVertex[i].name)
         }
         return (listNames)
+    }
+
+    fun sortVertexes(): List<String> {
+        val list = getNames()
+        list.sortBy { it.length }
+        return list
     }
 }

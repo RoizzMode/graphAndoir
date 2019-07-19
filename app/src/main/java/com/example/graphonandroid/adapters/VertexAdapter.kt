@@ -1,4 +1,4 @@
-package com.example.graphonandroid
+package com.example.graphonandroid.adapters
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,8 +8,10 @@ import android.view.View
 import android.widget.*
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import com.example.graphonandroid.R
+import com.example.graphonandroid.contracts.ListContract
 
-class VertexAdapter(private val items: List<String>, private val presenter: VertexContract.VertexPresenter) : RecyclerView.Adapter<VertexAdapter.VertexViewHolder>() {
+class VertexAdapter(private val items: List<String>, private val list: ListContract) : RecyclerView.Adapter<VertexAdapter.VertexViewHolder>() {
 
     class VertexViewHolder(vertexView: View) : RecyclerView.ViewHolder(vertexView) {
         val name: TextView = vertexView.findViewById(R.id.name_of_vertex)
@@ -41,14 +43,14 @@ class VertexAdapter(private val items: List<String>, private val presenter: Vert
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                presenter.neighbourNameEntered(holder.nameOfNeighbourEditText.text.toString())
+                list.neighbourNameEntered(holder.nameOfNeighbourEditText.text.toString())
             }
         })
     }
 
     private fun initButtonForAddingNeighbours(holder: VertexViewHolder, position: Int) {
         holder.addNeighbourButton.setOnClickListener{
-            presenter.addNeighbourButtonClicked(position)
+            list.addNeighbourButtonClicked(position)
         }
     }
 }
