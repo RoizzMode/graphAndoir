@@ -1,7 +1,6 @@
 package com.example.graphonandroid.adapters
 
-import android.text.Editable
-import android.text.TextWatcher
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +9,13 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graphonandroid.R
 import com.example.graphonandroid.contracts.ListContract
+import com.example.graphonandroid.data.VertexStringData
 
-class VertexAdapter(private val items: List<String>, private val list: ListContract) : RecyclerView.Adapter<VertexAdapter.VertexViewHolder>() {
+class VertexAdapter(private val items: List<VertexStringData>, private val list: ListContract) : RecyclerView.Adapter<VertexAdapter.VertexViewHolder>() {
 
-    class VertexViewHolder(vertexView: View) : RecyclerView.ViewHolder(vertexView) {
+    class VertexViewHolder(val vertexView: View) : RecyclerView.ViewHolder(vertexView) {
         val name: TextView = vertexView.findViewById(R.id.name_of_vertex)
-        val nameOfNeighbourEditText: EditText = vertexView.findViewById(R.id.name_of_neighbour)
+        val neighbours: TextView = vertexView.findViewById(R.id.current_neighbours)
         val addNeighbourButton: Button = vertexView.findViewById(R.id.add_neighbour)
     }
 
@@ -24,9 +24,10 @@ class VertexAdapter(private val items: List<String>, private val list: ListContr
         return VertexViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: VertexViewHolder, position: Int) {
-        holder.name.text = items[position]
-        initEditTextAddNeighbour(holder)
+        holder.name.text = items[position].name
+        holder.neighbours.text = "${holder.vertexView.resources.getText(R.string.current_neighbours)} ${items[position].neighbours}"
         initButtonForAddingNeighbours(holder, position)
     }
 
@@ -34,23 +35,9 @@ class VertexAdapter(private val items: List<String>, private val list: ListContr
         return items.size
     }
 
-    private fun initEditTextAddNeighbour(holder: VertexViewHolder) {
-        holder.nameOfNeighbourEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                list.neighbourNameEntered(holder.nameOfNeighbourEditText.text.toString())
-            }
-        })
-    }
-
     private fun initButtonForAddingNeighbours(holder: VertexViewHolder, position: Int) {
-        holder.addNeighbourButton.setOnClickListener{
-            list.addNeighbourButtonClicked(position)
+        holder.addNeighbourButton.setOnClickListener {
+            list.showNeighboursButtonClicked(position)
         }
     }
 }

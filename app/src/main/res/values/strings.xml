@@ -1,20 +1,73 @@
 <resources>
-    <string name="app_name">TaskManager</string>
-    <string name="addTask">Add task</string>
+    <string name="app_name">Graph</string>
+    <string name="addTask"
+            translatable="false">Add task</string>
     <string name="calculateButton">Calculate</string>
     <string name="result">Result</string>
-    <string name="addButton">Add</string>
+    <string name="addButton"
+            translatable="false">Add</string>
     <string name="calculate">Calculate</string>
-    <string name="add_vertex">add new vertex</string>
+    <string name="add_vertex">Add new vertex</string>
     <string name="your_result">Your result</string>
     <string name="add_neighbour">Add neighbour</string>
     <string name="name_of_vertex">Name</string>
     <string name="name_of_neighbour">Name of neighbour</string>
     <string name="name_of_new_vertex">Name of new vertex</string>
-    <string name="start_vertex">Start vertex</string>
+    <string name="start_vertex">Choose start vertex</string>
     <string name="title_activity_result">Result page</string>
     <string name="sort_vertex">sort vertexes</string>
     <string name="go_to_operations">Go to operations</string>
     <string name="neighbour_added">Neighbour added</string>
     <string name="vertex_does_not_exist">Such vertex does not exist</string>
+    <string name="clear_all">Clear all</string>
+    <string name="return_button">At main screen</string>
+    <string name="name_vertex">Enter name of new vertex</string>
+    <string name="choose_neighbours">Choose neighbours</string>
+    <string name="name_used">Such name of vertex was used</string>
+    <string name="current_neighbours">Current neighbours: </string>
 </resources>
+
+        <!--Process: com.example.graphonandroid, PID: 18426-->
+        <!--android.database.sqlite.SQLiteException: no such column: V (code 1 SQLITE_ERROR): , while compiling: SELECT * FROM VERTEXES WHERE name = V-->
+        <!--at android.database.sqlite.SQLiteConnection.nativePrepareStatement(Native Method)-->
+        <!--at android.database.sqlite.SQLiteConnection.acquirePreparedStatement(SQLiteConnection.java:986)-->
+        <!--at android.database.sqlite.SQLiteConnection.prepare(SQLiteConnection.java:593)-->
+        <!--at android.database.sqlite.SQLiteSession.prepare(SQLiteSession.java:590)-->
+        <!--at android.database.sqlite.SQLiteProgram.<init>(SQLiteProgram.java:61)-->
+<!--at android.database.sqlite.SQLiteQuery.<init>(SQLiteQuery.java:37)-->
+    <!--at android.database.sqlite.SQLiteDirectCursorDriver.query(SQLiteDirectCursorDriver.java:46)-->
+    <!--at android.database.sqlite.SQLiteDatabase.rawQueryWithFactory(SQLiteDatabase.java:1443)-->
+    <!--at android.database.sqlite.SQLiteDatabase.rawQuery(SQLiteDatabase.java:1382)-->
+    <!--at com.example.graphonandroid.bases.DatabaseHandler.getNeighboursForVertex(DatabaseHandler.kt:61)-->
+    <!--at com.example.graphonandroid.data.GraphModel.getNeighboursFromDB(GraphModel.kt:72)-->
+    <!--at com.example.graphonandroid.data.GraphModel.applicationStarted(GraphModel.kt:68)-->
+    <!--at com.example.graphonandroid.presenters.MainPresenter.fragmentStarted(MainPresenter.kt:60)-->
+    <!--at com.example.graphonandroid.fragments.MainFragment.applicationStarted(MainFragment.kt:109)-->
+    <!--at com.example.graphonandroid.fragments.MainFragment.onViewCreated(MainFragment.kt:39)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.moveToState(FragmentManager.java:1471)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.moveFragmentToExpectedState(FragmentManager.java:1784)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.moveToState(FragmentManager.java:1852)-->
+    <!--at androidx.fragment.app.BackStackRecord.executeOps(BackStackRecord.java:802)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.executeOps(FragmentManager.java:2625)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.executeOpsTogether(FragmentManager.java:2411)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.removeRedundantOperationsAndExecute(FragmentManager.java:2366)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.execPendingActions(FragmentManager.java:2273)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.dispatchStateChange(FragmentManager.java:3273)-->
+    <!--at androidx.fragment.app.FragmentManagerImpl.dispatchActivityCreated(FragmentManager.java:3229)-->
+    <!--at androidx.fragment.app.FragmentController.dispatchActivityCreated(FragmentController.java:201)-->
+    <!--at androidx.fragment.app.FragmentActivity.onStart(FragmentActivity.java:620)-->
+    <!--at androidx.appcompat.app.AppCompatActivity.onStart(AppCompatActivity.java:178)-->
+    <!--at android.app.Instrumentation.callActivityOnStart(Instrumentation.java:1425)-->
+    <!--at android.app.Activity.performStart(Activity.java:7825)-->
+    <!--at android.app.ActivityThread.handleStartActivity(ActivityThread.java:3292)-->
+    <!--at android.app.servertransaction.TransactionExecutor.performLifecycleSequence(TransactionExecutor.java:221)-->
+    <!--at android.app.servertransaction.TransactionExecutor.cycleToPath(TransactionExecutor.java:201)-->
+    <!--at android.app.servertransaction.TransactionExecutor.executeLifecycleState(TransactionExecutor.java:173)-->
+    <!--at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:97)-->
+    <!--at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2016)-->
+    <!--at android.os.Handler.dispatchMessage(Handler.java:107)-->
+    <!--at android.os.Looper.loop(Looper.java:214)-->
+    <!--at android.app.ActivityThread.main(ActivityThread.java:7343)-->
+    <!--at java.lang.reflect.Method.invoke(Native Method)-->
+    <!--at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)-->
+    <!--at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:933)-->

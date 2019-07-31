@@ -29,27 +29,27 @@ class CalculatePresenterTest {
         assertEquals(presenter.nameOfStartVertex, "First")
     }
 
-    @Test
-    fun `calculateButtonClicked if pass name of existing vertex should show result string`() {
-        whenever(graphModel.calculateFirstDepthSearch("First")).thenReturn(arrayListOf("First", "Second").toString())
-        initStartVertexName()
-
-        presenter.calculateButtonClicked()
-
-        verify(graphModel).calculateFirstDepthSearch(presenter.nameOfStartVertex)
-        verify(view).showCalculateResult(arrayListOf("First", "Second").toString())
-    }
-
-    @Test
-    fun `calculateButtonClicked if pass name of not existing vertex should show null result`(){
-        val notExisting = "Fourth"
-        presenter.startVertexNameEntered(notExisting)
-
-        presenter.calculateButtonClicked()
-
-        verify(graphModel).calculateFirstDepthSearch(presenter.nameOfStartVertex)
-        verify(view).showNullResult()
-    }
+//    @Test
+//    fun `calculateButtonClicked if pass name of existing vertex should show result string`() {
+//        whenever(graphModel.calculateFirstDepthSearch("First")).thenReturn(arrayListOf("First", "Second").toString())
+//        initStartVertexName()
+//
+//        presenter.calculateButtonClicked()
+//
+//        verify(graphModel).calculateFirstDepthSearch(presenter.nameOfStartVertex)
+//        verify(view).showCalculateResult(arrayListOf("First", "Second").toString())
+//    }
+//
+//    @Test
+//    fun `calculateButtonClicked if pass name of not existing vertex should show null result`(){
+//        val notExisting = "Fourth"
+//        presenter.startVertexNameEntered(notExisting)
+//
+//        presenter.calculateButtonClicked()
+//
+//        verify(graphModel).calculateFirstDepthSearch(presenter.nameOfStartVertex)
+//        verify(view).showNullResult()
+//    }
 
     @Test
     fun `sortButtonClicked should show string result of sorted array`() {

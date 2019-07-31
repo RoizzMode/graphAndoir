@@ -1,8 +1,10 @@
 package com.example.graphonandroid.data
 
 import android.app.Application
+import com.example.graphonandroid.bases.DatabaseHandler
 
-class DataApplication: Application() {
+class DataApplication : Application() {
 
-    val graphModel = GraphModel(AlgorithmDFS())
+    private val db = DatabaseHandler(this)
+    val graphModel = GraphModel(AlgorithmDFS(), db)
 }

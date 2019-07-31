@@ -1,15 +1,18 @@
 package com.example.graphonandroid.contracts
 
 interface CalculateContract {
-    interface CalculateView{
-        fun showCalculateResult(result:String)
-        fun showSortResult(result:String)
-        fun showNullResult()
+    interface CalculateView {
+        fun showListOfVertex(list: ArrayList<String>)
+        fun showCalculateResult(result: String)
+        fun showSortResult(result: String)
+        fun cleanResult()
     }
 
-    interface CalculatePresenter{
+    interface CalculatePresenter {
         fun calculateButtonClicked()
         fun sortButtonClicked()
-        fun startVertexNameEntered(name:String)
+        fun startVertexNameEntered(name: String)
+        fun clearAllClicked()
+        fun resultCalculated(result: String)
     }
 }

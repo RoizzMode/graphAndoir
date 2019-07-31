@@ -10,14 +10,11 @@ class CalculatePresenter(private val graphModel: GraphModel) : CalculateContract
 
     fun attachView(view: CalculateContract.CalculateView) {
         this.view = view
+        graphModel.attachResultPresenter(this)
     }
 
     override fun calculateButtonClicked() {
-        val result = graphModel.calculateFirstDepthSearch(nameOfStartVertex)
-        if (result == null)
-            view.showNullResult()
-        else
-            view.showCalculateResult(result)
+        view.showListOfVertex(graphModel.getNames())
     }
 
     override fun startVertexNameEntered(name: String) {
@@ -25,6 +22,17 @@ class CalculatePresenter(private val graphModel: GraphModel) : CalculateContract
     }
 
     override fun sortButtonClicked() {
-        view.showSortResult(graphModel.sortVertexes().toString())
+        view.showSortResult(
+            graphModel.getSortedVertexesResult()
+        )
+    }
+
+    override fun clearAllClicked() {
+        graphModel.clearAll()
+        view.cleanResult()
+    }
+
+    override fun resultCalculated(result: String) {
+        view.showCalculateResult(result)
     }
 }
