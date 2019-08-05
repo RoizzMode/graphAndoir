@@ -1,9 +1,11 @@
 package com.example.graphonandroid.presenters
 
+import com.example.graphonandroid.contracts.IListItemClickListener
 import com.example.graphonandroid.data.GraphModel
 import com.example.graphonandroid.dialogs.ChooseItemToStartDialog
 
-class ChooseItemToStartDialogPresenter(private val graphModel: GraphModel) {
+class ChooseItemToStartDialogPresenter(private val graphModel: GraphModel) :
+    IListItemClickListener {
 
     private lateinit var dialogView: ChooseItemToStartDialog
 
@@ -14,7 +16,8 @@ class ChooseItemToStartDialogPresenter(private val graphModel: GraphModel) {
         dialogView.showItems(graphModel.getNames())
     }
 
-    fun itemClicked(position: Int) {
-        graphModel.calculateFirstDepthSearch(position)
+    override fun itemClicked(position: Int) {
+        graphModel.startPosition = position
+        dialogView.dismiss()
     }
 }

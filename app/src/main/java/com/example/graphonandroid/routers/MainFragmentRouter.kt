@@ -8,8 +8,9 @@ class MainFragmentRouter(private val mainFragment: MainFragment) {
 
     fun goToNextScreen(){
         val fragmentTransaction = mainFragment.fragmentManager?.beginTransaction() ?: throw NullPointerException()
-        fragmentTransaction.replace(R.id.container, ResultFragment(), "RESULT_FRAGMENT")
-        fragmentTransaction.addToBackStack(ResultFragment::class.java.name)
-        fragmentTransaction.commit()
+        fragmentTransaction
+            .replace(R.id.container, ResultFragment(), "RESULT_FRAGMENT")
+            .addToBackStack(ResultFragment::class.java.name)
+            .commit()
     }
 }

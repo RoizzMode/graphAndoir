@@ -17,6 +17,6 @@ interface VertexContract {
         fun vertexNameEntered(name: String)
         fun clearAllClicked()
         fun viewCreated()
-        fun dataChanged()
+        fun dialogClosed()
     }
 }

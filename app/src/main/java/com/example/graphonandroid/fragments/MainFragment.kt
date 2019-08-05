@@ -1,10 +1,9 @@
 package com.example.graphonandroid.fragments
 
+import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,12 +18,28 @@ import com.example.graphonandroid.presenters.MainPresenter
 import com.example.graphonandroid.routers.MainFragmentRouter
 import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : Fragment(), VertexContract.VertexView {
+class MainFragment : Fragment(), VertexContract.VertexView, DialogInterface.OnDismissListener {
 
     private lateinit var presenter: MainPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.main_fragment, container, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.clear_all -> {
+            clearAll()
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,10 +48,14 @@ class MainFragment : Fragment(), VertexContract.VertexView {
             throw NullPointerException()
         presenter.attachView(this)
         initAdapterAndButtons()
-        applicationStarted()
+        presenter.fragmentStarted()
     }
 
-    fun clearAll() {
+    override fun onDismiss(p0: DialogInterface?) {
+        presenter.dialogClosed()
+    }
+
+    private fun clearAll() {
         presenter.clearAllClicked()
     }
 
@@ -74,23 +93,19 @@ class MainFragment : Fragment(), VertexContract.VertexView {
         listOfVertex.adapter = adapter
     }
 
-    private fun applicationStarted(){
-        presenter.fragmentStarted()
-    }
-
     override fun showNameTakenMessage() {
         Toast.makeText(activity, (getText(R.string.name_used).toString()), Toast.LENGTH_SHORT).show()
     }
 
     override fun letEnterNewVertex() {
         val addVertexDialog = AddVertexDialog()
-        addVertexDialog.show(activity?.supportFragmentManager ?: throw NullPointerException(), "ADD_VERTEX_DIALOG")
+        addVertexDialog.show(childFragmentManager, "ADD_VERTEX_DIALOG")
     }
 
     override fun showNeighboursForThisVertex(position: Int, items: List<VertexStringData>) {
-        arguments = Bundle().apply{putInt("position", position)}
         val chooseNeighboursDialog = ChooseNeighboursDialog()
+        arguments = Bundle().apply { putInt(ChooseNeighboursDialog.position_key, position) }
         chooseNeighboursDialog.arguments = arguments
-        chooseNeighboursDialog.show(activity?.supportFragmentManager ?: throw NullPointerException(), "CHOOSE_NEIGHBOURS_DIALOG")
+        chooseNeighboursDialog.show(childFragmentManager, "CHOOSE_NEIGHBOURS_DIALOG")
     }
 }

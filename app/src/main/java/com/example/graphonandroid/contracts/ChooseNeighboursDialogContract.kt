@@ -8,7 +8,7 @@ interface ChooseNeighboursDialogContract {
     }
 
     interface DialogPresenter{
-        fun neighbourCheckBoxChecked(currentName:String, currentPosition: Int)
-        fun neighbourCheckBoxUnchecked(currentName: String, currentPosition: Int)
+        fun neighbourCheckBoxChecked(currentName:String)
+        fun neighbourCheckBoxUnchecked(currentName: String)
     }
 }

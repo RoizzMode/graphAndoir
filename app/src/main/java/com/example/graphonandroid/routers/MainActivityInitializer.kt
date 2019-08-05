@@ -6,7 +6,7 @@ import com.example.graphonandroid.activities.MainActivity
 import com.example.graphonandroid.fragments.MainFragment
 import com.example.graphonandroid.fragments.ResultFragment
 
-class MainActivityRouter(currentActivity: MainActivity) {
+class MainActivityInitializer(currentActivity: MainActivity) {
     private val fragmentManager = currentActivity.supportFragmentManager
     private val mainFragment = MainFragment()
     private val mainTag = "MAIN_FRAGMENT"
@@ -22,23 +22,9 @@ class MainActivityRouter(currentActivity: MainActivity) {
         addContainer(R.id.container, mainFragment, mainTag)
     }
 
-//    private fun replaceContainer(container: Int, fragment: Fragment, tag:String){
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(container, fragment, tag)
-//        fragmentTransaction.addToBackStack(fragment::class.java.name)
-//        fragmentTransaction.commit()
-//    }
-
     private fun addContainer(container:Int, fragment: Fragment, tag:String){
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.add(container, fragment, tag)
         fragmentTransaction.commit()
     }
-
-    fun returnToFirstScreen(){
-        if (fragmentManager.findFragmentById(R.id.container) is ResultFragment)
-            fragmentManager.popBackStackImmediate()
-    }
-
-    fun getMainFragment() = mainFragment
 }

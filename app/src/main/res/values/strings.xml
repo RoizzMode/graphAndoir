@@ -25,6 +25,7 @@
     <string name="choose_neighbours">Choose neighbours</string>
     <string name="name_used">Such name of vertex was used</string>
     <string name="current_neighbours">Current neighbours: </string>
+    <string name="current_neighbours_formatted">Current neighbours: %1$s</string>
 </resources>
 
         <!--Process: com.example.graphonandroid, PID: 18426-->

@@ -6,20 +6,22 @@ import com.example.graphonandroid.data.GraphModel
 class ChooseNeighboursDialogPresenter(private val graphModel: GraphModel): ChooseNeighboursDialogContract.DialogPresenter {
 
     private lateinit var dialogView: ChooseNeighboursDialogContract.DialogView
+    private var currentPosition = 0
 
     fun attachView(currentView: ChooseNeighboursDialogContract.DialogView){
         dialogView = currentView
     }
 
-    override fun neighbourCheckBoxChecked(currentName:String, currentPosition: Int) {
+    override fun neighbourCheckBoxChecked(currentName:String) {
         graphModel.addNeighbour(currentPosition, currentName)
     }
 
-    override fun neighbourCheckBoxUnchecked(currentName: String, currentPosition: Int) {
+    override fun neighbourCheckBoxUnchecked(currentName: String) {
         graphModel.removeNeighbour(currentPosition, currentName)
     }
 
-    fun dialogOpened(){
+    fun dialogOpenedForThisPosition(position: Int){
+        currentPosition = position
         dialogView.showNeighboursForThisVertex(graphModel.getItems())
     }
 }

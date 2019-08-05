@@ -2,6 +2,7 @@ package com.example.graphonandroid.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -24,9 +25,11 @@ class AddVertexDialog: DialogFragment(), AddVertexDialogContract.DialogView {
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         mDialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_add_vertex, null)
-        val dialogBuilder = AlertDialog.Builder(context ?: throw NullPointerException()).setView(mDialogView).setTitle(R.string.add_vertex)
+
         presenter = AddVertexDialogPresenter((activity?.application as DataApplication).graphModel)
         presenter.attachView(this)
+
+        val dialogBuilder = AlertDialog.Builder(context ?: throw NullPointerException()).setView(mDialogView).setTitle(R.string.add_vertex)
         initEditNewVertexName(mDialogView)
         dialogBuilder.setPositiveButton(android.R.string.ok) { _,_ ->
             presenter.addVertexConfirmedClicked()
@@ -44,9 +47,16 @@ class AddVertexDialog: DialogFragment(), AddVertexDialogContract.DialogView {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                presenter.vertexNameEntered(view.name_of_new_vertex.text.toString())
+                presenter.vertexNameEntered(p0.toString())
             }
         })
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        if (parentFragment is DialogInterface.OnDismissListener) {
+            (parentFragment as DialogInterface.OnDismissListener).onDismiss(dialog)
+        }
     }
 
     override fun showNameTakenMessage(){

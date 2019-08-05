@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graphonandroid.R
-import com.example.graphonandroid.presenters.ChooseItemToStartDialogPresenter
+import com.example.graphonandroid.contracts.IListItemClickListener
 
-class ChooseVertexAdapter(private val items: List<String>, private val presenter: ChooseItemToStartDialogPresenter) : RecyclerView.Adapter<ChooseVertexAdapter.ChooseVertexViewHolder>() {
+class ChooseVertexAdapter(private val items: List<String>, private val clickListener: IListItemClickListener) : RecyclerView.Adapter<ChooseVertexAdapter.ChooseVertexViewHolder>() {
 
     class ChooseVertexViewHolder(val chooseVertexView: View) : RecyclerView.ViewHolder(chooseVertexView) {
         val name: TextView = chooseVertexView.findViewById(R.id.name_of_start)
@@ -26,7 +26,7 @@ class ChooseVertexAdapter(private val items: List<String>, private val presenter
 
     private fun initItemClickListener(holder: ChooseVertexViewHolder, position: Int) {
         holder.chooseVertexView.setOnClickListener {
-            presenter.itemClicked(position)
+            clickListener.itemClicked(position)
         }
     }
 

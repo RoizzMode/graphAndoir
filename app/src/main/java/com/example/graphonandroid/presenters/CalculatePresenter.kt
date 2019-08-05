@@ -10,7 +10,6 @@ class CalculatePresenter(private val graphModel: GraphModel) : CalculateContract
 
     fun attachView(view: CalculateContract.CalculateView) {
         this.view = view
-        graphModel.attachResultPresenter(this)
     }
 
     override fun calculateButtonClicked() {
@@ -32,7 +31,12 @@ class CalculatePresenter(private val graphModel: GraphModel) : CalculateContract
         view.cleanResult()
     }
 
-    override fun resultCalculated(result: String) {
-        view.showCalculateResult(result)
+    override fun calculateWindowClosed() {
+        view.showCalculateResult(graphModel.calculateFirstDepthSearch())
+        view.paintGraph(graphModel.getItems(), graphModel.startPosition)
+    }
+
+    fun clearAll(){
+        graphModel.clearAll()
     }
 }

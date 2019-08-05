@@ -3,20 +3,30 @@ package com.example.graphonandroid.presenters
 import com.example.graphonandroid.contracts.ListContract
 import com.example.graphonandroid.data.GraphModel
 import com.example.graphonandroid.contracts.VertexContract
+import com.example.graphonandroid.contracts.VertexListener
 
 class MainPresenter(private val graphModel: GraphModel) : VertexContract.VertexPresenter, ListContract {
 
     private lateinit var view: VertexContract.VertexView
     private lateinit var nameOfNewVertex: String
+//    private val dataListener: VertexListener = object : VertexListener{
+//        override fun onDataChanged() {
+//            view.showItemsNames(graphModel.getItems())
+//        }
+//    }
 
     fun attachView(currentView: VertexContract.VertexView) {
         view = currentView
-        graphModel.attachMainPresenter(this)
     }
 
     override fun viewCreated() {
         view.showItemsNames(graphModel.getItems())
-    }
+        graphModel.listen = object : VertexListener{
+            override fun onDataChanged() {
+                view.showItemsNames(graphModel.getItems())
+            }
+        }
+      }
 
     override fun addVertexConfirmedClicked() {
         if (graphModel.checkIfNameUsed(nameOfNewVertex))
@@ -25,6 +35,10 @@ class MainPresenter(private val graphModel: GraphModel) : VertexContract.VertexP
             graphModel.addNewVertex(nameOfNewVertex)
             view.showItemsNames(graphModel.getItems())
         }
+    }
+
+    override fun dialogClosed() {
+        view.showItemsNames(graphModel.getItems())
     }
 
     override fun showNeighboursButtonClicked(position: Int) {
@@ -39,14 +53,6 @@ class MainPresenter(private val graphModel: GraphModel) : VertexContract.VertexP
         view.showItemsNames(graphModel.getItems())
     }
 
-    override fun neighbourCheckBoxChecked(currentName:String, currentPosition: Int) {
-        graphModel.addNeighbour(currentPosition, currentName)
-    }
-
-    override fun neighbourCheckBoxUnchecked(currentName: String, currentPosition: Int) {
-        graphModel.removeNeighbour(currentPosition, currentName)
-    }
-
     override fun vertexNameEntered(name: String) {
         nameOfNewVertex = name
     }
@@ -57,12 +63,6 @@ class MainPresenter(private val graphModel: GraphModel) : VertexContract.VertexP
     }
 
     fun fragmentStarted(){
-        graphModel.clearCurrentList()
-        graphModel.applicationStarted()
-        view.showItemsNames(graphModel.getItems())
-    }
-
-    override fun dataChanged() {
         view.showItemsNames(graphModel.getItems())
     }
 }

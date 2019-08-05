@@ -1,28 +1,23 @@
 package com.example.graphonandroid.data
 
-import com.example.graphonandroid.bases.DatabaseHandler
-import com.example.graphonandroid.contracts.CalculateContract
-import com.example.graphonandroid.contracts.VertexContract
+import com.example.graphonandroid.bases.VertexBaseHandler
+import com.example.graphonandroid.contracts.VertexListener
 
+// todo GraphView, MigrateBase, DataListener
+class GraphModel(private val algorithmDFS: AlgorithmDFS, private val vertexBaseHandler: VertexBaseHandler) {
 
-class GraphModel(private val algorithmDFS: AlgorithmDFS, private val db:DatabaseHandler) {
 
     val listVertex = arrayListOf<Vertex>()
-    private lateinit var mainPresenter: VertexContract.VertexPresenter
-    private lateinit var resultPresenter: CalculateContract.CalculatePresenter
-
-    fun attachMainPresenter(currentMainPresenter: VertexContract.VertexPresenter){
-        mainPresenter = currentMainPresenter
-    }
-
-    fun attachResultPresenter(currentResultPresenter: CalculateContract.CalculatePresenter){
-        resultPresenter = currentResultPresenter
-    }
+    var startPosition = -1
+    lateinit var listen: VertexListener
 
     fun addNewVertex(name: String) {
         listVertex.add(Vertex(name))
-        db.addVertex(listVertex[listVertex.lastIndex].name, listVertex[listVertex.lastIndex].neighbours.toString())
-        mainPresenter.dataChanged()
+        listen.onDataChanged()
+
+        val vertexName = listVertex[listVertex.lastIndex].name
+        val vertexNeighbours = listVertex[listVertex.lastIndex].neighbours.toString()
+        vertexBaseHandler.addVertex(vertexName, vertexNeighbours)
     }
 
     fun addNeighbour(position: Int, name:String) {
@@ -30,22 +25,28 @@ class GraphModel(private val algorithmDFS: AlgorithmDFS, private val db:Database
             if (name == listVertex[i].name)
                 listVertex[position].neighbours.add(listVertex[i])
         }
-        db.updateNeighbour(listVertex[position].name, listVertex[position].neighbours.toString())
-        mainPresenter.dataChanged()
+        listen.onDataChanged()
+
+        updateNeighbours(position)
     }
 
     fun removeNeighbour(position: Int, name: String){
         var p = 0
         for (i in 0..listVertex[position].neighbours.lastIndex){
             if (name == listVertex[position].neighbours[i].name){
-                println("Size:")
-                println(listVertex[position].neighbours.size)
                 p = i
+                break
             }
         }
         listVertex[position].neighbours.removeAt(p)
-        db.updateNeighbour(listVertex[position].name, listVertex[position].neighbours.toString())
-        mainPresenter.dataChanged()
+
+        updateNeighbours(position)
+    }
+
+    private fun updateNeighbours(position: Int){
+        val vertexName  = listVertex[position].name
+        val vertexNeighbours = listVertex[position].neighbours.toString()
+        vertexBaseHandler.updateNeighbour(vertexName, vertexNeighbours)
     }
 
     fun clearAll() {
@@ -53,14 +54,12 @@ class GraphModel(private val algorithmDFS: AlgorithmDFS, private val db:Database
         deleteAllVertexesInDB()
     }
 
-    fun clearCurrentList(){
-        listVertex.clear()
-    }
-
-    fun calculateFirstDepthSearch(position: Int){
+    fun calculateFirstDepthSearch(): String{
         val algorithm = algorithmDFS
-        val chosenVertex: Vertex = listVertex[position]
-        resultPresenter.resultCalculated(algorithm.calculateDepthFirstSearchAndReset(chosenVertex, arrayListOf(), listVertex).toString())
+        if (startPosition == -1)
+            return "Result"
+        val chosenVertex: Vertex = listVertex[startPosition]
+        return algorithm.calculateDepthFirstSearchAndReset(chosenVertex, arrayListOf(), listVertex).toString()
     }
 
     fun findStartVertex(name: String, listVertex: ArrayList<Vertex>): Vertex? {
@@ -87,7 +86,7 @@ class GraphModel(private val algorithmDFS: AlgorithmDFS, private val db:Database
         return (listNames)
     }
 
-    fun getListOfNeighbours(currentVertex:Vertex): List<String>{
+    private fun getListOfNeighbours(currentVertex:Vertex): List<String>{
         val listOfNeighbours = mutableListOf<String>()
         for (i in 0..currentVertex.neighbours.lastIndex){
             listOfNeighbours.add(currentVertex.neighbours[i].name)
@@ -102,11 +101,11 @@ class GraphModel(private val algorithmDFS: AlgorithmDFS, private val db:Database
     }
 
     private fun deleteAllVertexesInDB(){
-        db.deleteAll()
+        vertexBaseHandler.deleteAll()
     }
 
-    fun applicationStarted(){
-        val list = db.getAllVertexes()
+    fun initModel(){
+        val list = vertexBaseHandler.getAllVertexes()
         for (i in 0..list.lastIndex){
             listVertex.add(Vertex(list[i]))
         }
@@ -115,7 +114,7 @@ class GraphModel(private val algorithmDFS: AlgorithmDFS, private val db:Database
     }
 
     private fun getNeighboursFromDB(currentVertex: Vertex){
-        val neighboursString = db.getNeighboursForVertex(currentVertex.name)
+        val neighboursString = vertexBaseHandler.getNeighboursForVertex(currentVertex.name)
         val neighboursList = neighboursString.split("[", "]", ", ")
         for (i in 0..neighboursList.lastIndex){
             for (j in 0..listVertex.lastIndex){

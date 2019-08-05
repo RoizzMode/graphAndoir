@@ -2,6 +2,7 @@ package com.example.graphonandroid.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,17 +28,24 @@ class ChooseNeighboursDialog: DialogFragment(), ChooseNeighboursDialogContract.D
         val dialogBuilder = AlertDialog.Builder(context ?: throw NullPointerException()).setView(dialogView).setTitle(R.string.add_vertex)
         presenter = ChooseNeighboursDialogPresenter((activity?.application as DataApplication).graphModel)
         presenter.attachView(this)
-        position = arguments?.getInt("position") ?: throw NullPointerException()
+        position = arguments?.getInt(position_key) ?: throw NullPointerException()
         dialogBuilder.setPositiveButton(android.R.string.ok) { _,_ ->
         }
         dialogBuilder.setNegativeButton(android.R.string.cancel) { _,_ -> }
-        presenter.dialogOpened()
+        presenter.dialogOpenedForThisPosition(position)
         return dialogBuilder.create()
     }
 
     override fun showNeighboursForThisVertex(items: List<VertexStringData>){
         dialogView.list_of_neighbours.layoutManager = LinearLayoutManager(dialogView.context)
-        dialogView.list_of_neighbours.adapter = NeighbourAdapter(getListOfNames(items), items[position].neighbours, position, presenter)
+        dialogView.list_of_neighbours.adapter = NeighbourAdapter(getListOfNames(items), items[position].neighbours, presenter)
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        if (parentFragment is DialogInterface.OnDismissListener){
+            (parentFragment as DialogInterface.OnDismissListener).onDismiss(dialog)
+        }
     }
 
     private fun getListOfNames(items: List<VertexStringData>): List<String>{
@@ -46,5 +54,9 @@ class ChooseNeighboursDialog: DialogFragment(), ChooseNeighboursDialogContract.D
             listOfNames.add(items[i].name)
         }
         return listOfNames
+    }
+
+    companion object {
+        const val position_key = "position"
     }
 }
