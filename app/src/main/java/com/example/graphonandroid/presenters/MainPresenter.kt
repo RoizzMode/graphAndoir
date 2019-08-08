@@ -1,5 +1,6 @@
 package com.example.graphonandroid.presenters
 
+import android.util.Log
 import com.example.graphonandroid.contracts.ListContract
 import com.example.graphonandroid.data.GraphModel
 import com.example.graphonandroid.contracts.VertexContract
@@ -9,24 +10,11 @@ class MainPresenter(private val graphModel: GraphModel) : VertexContract.VertexP
 
     private lateinit var view: VertexContract.VertexView
     private lateinit var nameOfNewVertex: String
-//    private val dataListener: VertexListener = object : VertexListener{
-//        override fun onDataChanged() {
-//            view.showItemsNames(graphModel.getItems())
-//        }
-//    }
+    private var listener: VertexListener? = null
 
     fun attachView(currentView: VertexContract.VertexView) {
         view = currentView
     }
-
-    override fun viewCreated() {
-        view.showItemsNames(graphModel.getItems())
-        graphModel.listen = object : VertexListener{
-            override fun onDataChanged() {
-                view.showItemsNames(graphModel.getItems())
-            }
-        }
-      }
 
     override fun addVertexConfirmedClicked() {
         if (graphModel.checkIfNameUsed(nameOfNewVertex))
@@ -63,6 +51,16 @@ class MainPresenter(private val graphModel: GraphModel) : VertexContract.VertexP
     }
 
     fun fragmentStarted(){
+        listener = object : VertexListener{
+            override fun onDataChanged() {
+                view.showItemsNames(graphModel.getItems())
+            }
+        }
+        graphModel.setOnChangeVertexListener(listener)
         view.showItemsNames(graphModel.getItems())
+    }
+
+    override fun calculateButtonClicked() {
+        graphModel.removeOnChangeVertexListener(listener ?: throw NullPointerException())
     }
 }

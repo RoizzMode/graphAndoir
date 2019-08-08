@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import com.example.graphonandroid.R
-import com.example.graphonandroid.presenters.ChooseNeighboursDialogPresenter
+import com.example.graphonandroid.contracts.CheckBoxListener
 
-class NeighbourAdapter(private val items: List<String>, private val neighboursData: List<String>, private val presenter: ChooseNeighboursDialogPresenter) : RecyclerView.Adapter<NeighbourAdapter.NeighbourViewHolder>() { // todo
+class NeighbourAdapter(private val items: List<String>, private val neighboursData: List<String>, private val checkboxListener: CheckBoxListener) : RecyclerView.Adapter<NeighbourAdapter.NeighbourViewHolder>() {
 
     class NeighbourViewHolder(neighbourView: View) : RecyclerView.ViewHolder(neighbourView) {
         val name: CheckBox = neighbourView.findViewById(R.id.neighbour_name)
@@ -33,9 +33,9 @@ class NeighbourAdapter(private val items: List<String>, private val neighboursDa
             holder.name.isChecked = true
         holder.name.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked)
-                presenter.neighbourCheckBoxChecked(items[position])
+                checkboxListener.neighbourCheckBoxChecked(items[position])
             else
-                presenter.neighbourCheckBoxUnchecked(items[position])
+                checkboxListener.neighbourCheckBoxUnchecked(items[position])
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.graphonandroid.fragments
 
-import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
@@ -18,7 +17,7 @@ import com.example.graphonandroid.presenters.MainPresenter
 import com.example.graphonandroid.routers.MainFragmentRouter
 import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : Fragment(), VertexContract.VertexView, DialogInterface.OnDismissListener {
+class MainFragment : Fragment(), VertexContract.VertexView{
 
     private lateinit var presenter: MainPresenter
 
@@ -51,10 +50,6 @@ class MainFragment : Fragment(), VertexContract.VertexView, DialogInterface.OnDi
         presenter.fragmentStarted()
     }
 
-    override fun onDismiss(p0: DialogInterface?) {
-        presenter.dialogClosed()
-    }
-
     private fun clearAll() {
         presenter.clearAllClicked()
     }
@@ -67,7 +62,6 @@ class MainFragment : Fragment(), VertexContract.VertexView, DialogInterface.OnDi
             go_to_operations.visibility = View.GONE
         }
         listOfVertex.layoutManager = LinearLayoutManager(activity)
-        presenter.viewCreated()
     }
 
     private fun createAdapter(items: List<VertexStringData>): VertexAdapter {
@@ -78,6 +72,7 @@ class MainFragment : Fragment(), VertexContract.VertexView, DialogInterface.OnDi
     private fun initGoToCalculationsButton() {
         val mainFragmentRouter = MainFragmentRouter(this)
         go_to_operations.setOnClickListener {
+            presenter.calculateButtonClicked()
             mainFragmentRouter.goToNextScreen()
         }
     }

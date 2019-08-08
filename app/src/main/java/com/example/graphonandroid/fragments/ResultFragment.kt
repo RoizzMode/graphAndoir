@@ -1,11 +1,11 @@
 package com.example.graphonandroid.fragments
 
 import android.content.DialogInterface
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.example.graphonandroid.R
+import com.example.graphonandroid.analysers.DeviceSizeChecker
 import com.example.graphonandroid.contracts.CalculateContract
 import com.example.graphonandroid.data.DataApplication
 import com.example.graphonandroid.data.VertexStringData
@@ -21,7 +21,8 @@ class ResultFragment : Fragment(), CalculateContract.CalculateView, DialogInterf
     private lateinit var chooseItemToStartDialog: ChooseItemToStartDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (!isLarge())
+        val deviceAnalyzer = DeviceSizeChecker(activity?.applicationContext ?: throw NullPointerException())
+        if (!deviceAnalyzer.isLarge())
             setHasOptionsMenu(true)
         return inflater.inflate(R.layout.result_fragment, container, false)
     }
@@ -44,8 +45,9 @@ class ResultFragment : Fragment(), CalculateContract.CalculateView, DialogInterf
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.clear_all -> {
+            val deviceAnalyzer = DeviceSizeChecker(activity?.applicationContext ?: throw NullPointerException())
             presenter.clearAll()
-            if (!isLarge()) {
+            if (!deviceAnalyzer.isLarge()) {
                 val router = ResultFragmentRouter(this)
                 router.goToTheFirstScreen()
             }
@@ -54,12 +56,6 @@ class ResultFragment : Fragment(), CalculateContract.CalculateView, DialogInterf
         else -> {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun isLarge(): Boolean { // todo
-        if ((resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) > Configuration.SCREENLAYOUT_SIZE_LARGE)
-            return true
-        return false
     }
 
     private fun initButtons() {

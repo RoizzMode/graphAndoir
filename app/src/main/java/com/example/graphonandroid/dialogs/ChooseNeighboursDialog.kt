@@ -2,7 +2,6 @@ package com.example.graphonandroid.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,13 +38,6 @@ class ChooseNeighboursDialog: DialogFragment(), ChooseNeighboursDialogContract.D
     override fun showNeighboursForThisVertex(items: List<VertexStringData>){
         dialogView.list_of_neighbours.layoutManager = LinearLayoutManager(dialogView.context)
         dialogView.list_of_neighbours.adapter = NeighbourAdapter(getListOfNames(items), items[position].neighbours, presenter)
-    }
-
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-        if (parentFragment is DialogInterface.OnDismissListener){
-            (parentFragment as DialogInterface.OnDismissListener).onDismiss(dialog)
-        }
     }
 
     private fun getListOfNames(items: List<VertexStringData>): List<String>{

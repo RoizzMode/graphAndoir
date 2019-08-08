@@ -8,17 +8,18 @@ import com.example.graphonandroid.fragments.ResultFragment
 
 class MainActivityInitializer(currentActivity: MainActivity) {
     private val fragmentManager = currentActivity.supportFragmentManager
-    private val mainFragment = MainFragment()
     private val mainTag = "MAIN_FRAGMENT"
     private val resultTag = "RESULT_FRAGMENT"
 
     fun initLargeScreen() {
+        val mainFragment = MainFragment()
         val resultFragment = ResultFragment()
         addContainer(R.id.container_left, mainFragment, mainTag)
         addContainer(R.id.container_right, resultFragment, resultTag)
     }
 
     fun initSmallScreen() {
+        val mainFragment = MainFragment()
         addContainer(R.id.container, mainFragment, mainTag)
     }
 

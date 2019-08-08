@@ -2,7 +2,6 @@ package com.example.graphonandroid.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -50,13 +49,6 @@ class AddVertexDialog: DialogFragment(), AddVertexDialogContract.DialogView {
                 presenter.vertexNameEntered(p0.toString())
             }
         })
-    }
-
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-        if (parentFragment is DialogInterface.OnDismissListener) {
-            (parentFragment as DialogInterface.OnDismissListener).onDismiss(dialog)
-        }
     }
 
     override fun showNameTakenMessage(){

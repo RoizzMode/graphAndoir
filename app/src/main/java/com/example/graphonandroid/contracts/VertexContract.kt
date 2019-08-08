@@ -12,11 +12,11 @@ interface VertexContract {
     }
 
     interface VertexPresenter {
+        fun calculateButtonClicked()
         fun addVertexConfirmedClicked()
         fun addVertexButtonClicked()
         fun vertexNameEntered(name: String)
         fun clearAllClicked()
-        fun viewCreated()
         fun dialogClosed()
     }
 }
